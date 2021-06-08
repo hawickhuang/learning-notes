@@ -66,6 +66,10 @@
 
 [1. k8s高可用集群安装](./devops/kubernetes/ha-install.md) 
 
+
+
+[2. k8s Pod状态检测学习 ](./devops/kubernetes/pod-detect.md)
+
 ### AWS 
  [1. AWS 网络设计](./devops/aws/vpc.md) 
 
