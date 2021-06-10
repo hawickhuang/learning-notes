@@ -34,6 +34,10 @@ Options:
       --target string           Set the target build stage to build.
 ```
 
+下面是整个流程的简介图
+
+![](./docker-build.png)
+
 当我们在终端执行命令`docker build . -t xxx:xxx`的时候，docker 的client 会发送信息到docker daemon的后端进程中，所以我们从docker daemon后端中的路由解析开始。
 
 1. 先初始化路由
