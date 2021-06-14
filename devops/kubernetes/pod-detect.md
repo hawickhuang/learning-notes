@@ -217,3 +217,27 @@ readinessProbe:
 >
 > 2. 存活性探测器不等待就绪性探测器成功。
 
+## 配置探测器
+
+其实Probe有很多的配置字段，可以使用这些字段精确的控制存活和就绪检测：
+
+- `initialDelaySeconds`: 容器启动后，等待多少秒后存活和就绪探测器才被初始化，默认时0秒，最小值是0；
+- `periodSeconds`: 执行探测的时间间隔，默认时10秒，最小值为1；
+- `timeoutSeconds`：探测的超时等待时间。默认值时1秒，最小值是1；
+- `successThreshold`: 探测器在失败后，被视为成功的最小连续成功数。默认值时1.存活和启动探测的这个值必须是1，最小值是1；
+- `failureThreshold`：当探测失败时，k8s的重试次数。存活探测情况下的放弃就意味着重启容器。就绪探测情况下的放弃Pod的状态会变为NotReady。默认值是3，最小值是1；
+
+### HTTP探测
+
+HTTP Probes可以在 `httpGet`上配置的字段：
+
+- `host`: 主机名，默认时pod的IP；
+- `scheme`: 连接主机的协议（HTTP或HTTPS）。默认是HTTP；
+- `path`: 访问HTTP服务的路径；
+- `httpHeaders`: 请求中自定义的HTTP头；
+- `port`:访问容器的端口号或端口名；
+
+参考文档：
+
+1. https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
