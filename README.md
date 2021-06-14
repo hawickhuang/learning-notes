@@ -50,7 +50,7 @@
 
 ### 分布式
 
-[1. Raft分布式一致性算法学习](./learn-raft.md)
+[1. Raft分布式一致性算法学习](./syterm-design/consistent/learn-raft.md)
 
 #### Zookeeper
  [1. zookeeper介绍](./system-design/zookeeper/intro.md) 
