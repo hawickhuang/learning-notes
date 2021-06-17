@@ -293,7 +293,7 @@ func (m *Map) missLocked() {
 
 ```go
 func (m *Map) Store(key, value interface{}) {
-  // 判断key是否在read中，若存在，则直接返回
+  // 判断key是否在read中，若存在，且entry没有被标记删除，尝试直接写入。写入成功则直接返回
 	read, _ := m.read.Load().(readOnly)
 	if e, ok := read.m[key]; ok && e.tryStore(&value) {
 		return
@@ -304,24 +304,64 @@ func (m *Map) Store(key, value interface{}) {
   // 二次检查
 	read, _ = m.read.Load().(readOnly)
 	if e, ok := read.m[key]; ok {
+    // 确保元素没有被标记为删除
 		if e.unexpungeLocked() {
-			// The entry was previously expunged, which implies that there is a
-			// non-nil dirty map and this entry is not in it.
+			// 这个元素之前被删除了，这意味着有一个非nil的dirty，这个元素不在里面.
 			m.dirty[key] = e
 		}
+    // 更新read map的元素值
 		e.storeLocked(&value)
 	} else if e, ok := m.dirty[key]; ok {
+    // 此时read map没有该元素，但是dirty map有该元素，并需修改dirty map元素值为最新值
 		e.storeLocked(&value)
 	} else {
+    // read.amended==false,说明dirty map为空，需要将read map 复制一份到dirty map
 		if !read.amended {
-			// We're adding the first new key to the dirty map.
-			// Make sure it is allocated and mark the read-only map as incomplete.
+			// 设置read.amended==true，说明dirty map有数据
 			m.dirtyLocked()
 			m.read.Store(readOnly{m: read.m, amended: true})
 		}
+    // 设置元素进入dirty map，此时dirty map拥有read map和最新设置的元素
 		m.dirty[key] = newEntry(value)
 	}
+  // 释放锁
 	m.mu.Unlock()
+}
+```
+
+tryStore实现：
+
+```go
+func (e *entry) tryStore(i *interface{}) bool {
+	for {
+		p := atomic.LoadPointer(&e.p)
+    // 标识为删除，直接返回
+		if p == expunged {
+			return false
+		}
+    // cas尝试写入新元素
+		if atomic.CompareAndSwapPointer(&e.p, p, unsafe.Pointer(i)) {
+			return true
+		}
+	}
+}
+```
+
+dirtyLocked实现：(从read中拷贝数据到dirty)
+
+```go
+func (m *Map) dirtyLocked() {
+	if m.dirty != nil {
+		return
+	}
+
+	read, _ := m.read.Load().(readOnly)
+	m.dirty = make(map[interface{}]*entry, len(read.m))
+	for k, e := range read.m {
+		if !e.tryExpungeLocked() {
+			m.dirty[k] = e
+		}
+	}
 }
 ```
 
