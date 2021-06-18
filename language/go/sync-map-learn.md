@@ -177,6 +177,8 @@ func Test_syncMapReadWrite(t *testing.T) {
 
 测试后发现，并不会出现普通map的panic报错。下表是sync.map的常用接口：
 
+## 常用接口
+
 | 需求                             | 接口                                       | 使用方法                                      |
 | -------------------------------- | ------------------------------------------ | --------------------------------------------- |
 | 创建sync.map                     | 无                                         | 直接声明即可                                  |
@@ -188,6 +190,8 @@ func Test_syncMapReadWrite(t *testing.T) {
 | 遍历                             | Range(f func(key, value interface{}) bool) | Range(f func(key, value interface{}) bool {}) |
 
 ## 实现
+
+### 结构体
 
 sync.map的定义（保留了主要的英文注释，添加了各字段中文解释）：
 
