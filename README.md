@@ -8,6 +8,8 @@
 
 [1. Go sync.map源码学习](./language/go/sync-map-learn.md)
 
+[2. Go channel 源码学习](./language/go/channel-learn.md)
+
 ### Java
 
 ### Scala
