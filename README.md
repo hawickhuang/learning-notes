@@ -97,8 +97,13 @@
 
 [1. Aliyun NAT配置](./) 
 
-
 ## 工具
 
-### flume
+### 数据同步
+
+#### flume
  [1. 一文精通flume数据摆渡](./tools/flume/intro.md) 
+
+#### Gravity
+
+[1. Gravity学习和性能测试](./tools/data-sync/gravity-learn.md)
