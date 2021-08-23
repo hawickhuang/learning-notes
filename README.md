@@ -10,7 +10,7 @@
 
 [3. Go channel 源码学习](./language/go/channel-learn.md)
 
-
+[4. Go GMP 模型学习](./language/go/gmp-learn.md)
 
 ### Java
 
