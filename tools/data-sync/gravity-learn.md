@@ -215,6 +215,14 @@ mode = "replication"
 
 ![](./gravity-quanzeng.png)
 
+- gravity环境：1CPU，4G（CPU在40左右）
+- mysql和kafka环境：2C4G，同一台机器，kafka是单节点，单replica；
+- 数据量：第一次全量250万记录；
+
+（第三行图是event per second 和 actual batch size；两个波峰是开启任务，进行全量的过程，启动任务同时也开启了增量写入）
+
+![](./gravity-quanliang.png)
+
 ## 定制化支持
 
 ### 多任务管理
